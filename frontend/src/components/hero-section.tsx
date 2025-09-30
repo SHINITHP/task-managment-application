@@ -27,7 +27,7 @@ export const HeroSection: React.FC = () => {
                 as="h1"
                 className="mx-auto max-w-4xl text-balance text-5xl max-md:font-semibold md:text-7xl xl:text-[5.25rem]"
               >
-                Advanced Tools for Medical Assessment Management
+                Advanced Tools for Task Management
               </TextEffect>
 
               <TextEffect
@@ -38,9 +38,8 @@ export const HeroSection: React.FC = () => {
                 as="p"
                 className="mx-auto mt-8 max-w-2xl text-balance text-lg"
               >
-                Customizable solutions to streamline medical assessments,
-                enhancing patient care with intuitive interfaces and precise
-                workflows.
+                Customizable solutions to streamline task organization, boosting
+                productivity with intuitive interfaces and efficient workflows.
               </TextEffect>
             </div>
           </div>

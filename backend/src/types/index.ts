@@ -23,3 +23,8 @@ export interface ITokenPayload {
     email: string;
     role: 'ADMIN' | 'AGENT'
 }
+
+export interface IDecodedToken extends ITokenPayload {
+  iat: number; // issued at (timestamp in seconds)
+  exp: number; // expiration timestamp in seconds
+}

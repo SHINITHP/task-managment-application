@@ -10,12 +10,12 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import z from "zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { signIn } from "@/api/authApi";
-import { toast } from 'react-hot-toast'
+import { toast } from "react-hot-toast";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -36,7 +36,7 @@ export const LoginPage = () => {
       navigate("/dashboard", { replace: true });
     }
   }, []);
-
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -76,9 +76,10 @@ export const LoginPage = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel htmlFor="email">Email</FormLabel>
                     <FormControl>
                       <Input
+                        id="email"
                         type="email"
                         placeholder="Enter your email"
                         {...field}
@@ -96,19 +97,34 @@ export const LoginPage = () => {
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex items-center justify-between">
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel htmlFor="password">Password</FormLabel>
                       <Button asChild variant="link" size="sm">
                         <Link to="#" className="text-sm">
                           Forgot your Password?
                         </Link>
                       </Button>
                     </div>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Enter your password"
-                        {...field}
-                      />
+                    <FormControl className="relative">
+                      <div>
+                        <Input
+                          id="password"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Enter your password"
+                          {...field}
+                          className="pr-10"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute bg-transparent right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-700"
+                        >
+                          {showPassword ? (
+                            <EyeOff size={20} />
+                          ) : (
+                            <Eye size={20} />
+                          )}
+                        </button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

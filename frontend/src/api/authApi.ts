@@ -7,7 +7,7 @@ export const signIn = async (
   payload: ISignInPayload
 ): Promise<AxiosResponse<IAuthResponse>> => {
   const response = await api.post<IAuthResponse>("/auth/sign-in", payload);
-
+  console.log('response', response)
   //save accesstoken to localstorage
   localStorage.setItem("accessToken", response.data.accessToken);
 

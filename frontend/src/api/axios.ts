@@ -21,7 +21,7 @@ api.interceptors.response.use(
     const originalRequest = error.config;
     if (
       error.response &&
-      error.response.status === 401 &&
+      error.response.status === 401 && error.response.message === 'Invalid or expired refresh token' &&
       !originalRequest._retry
     ) {
       originalRequest.retry = true;

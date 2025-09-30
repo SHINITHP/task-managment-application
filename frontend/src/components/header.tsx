@@ -1,4 +1,4 @@
-import { LogOut, Menu, Stethoscope, X } from "lucide-react";
+import { Hourglass, LogOut, Menu, Stethoscope, Timer, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -32,7 +32,7 @@ export const HeroHeader = () => {
 
   return (
     <header>
-      <nav className={`fixed z-20 bg-white w-full px-2 ${menuState ? "" :"border-b"}`}>
+      <nav className={`fixed z-20 border-b bg-white w-full px-2 `}>
         <div
           className={
             "mx-auto mt-2 max-w-8xl px-6 transition-all duration-300 lg:px-12"
@@ -44,9 +44,9 @@ export const HeroHeader = () => {
               <Link
                 to="/"
                 aria-label="home"
-                className="flex items-center space-x-2 gap-2 text-lg"
+                className="flex items-center space-x-2 gap-2 text-xl"
               >
-                <Stethoscope /> MEDICAL CARE
+                <Timer size={30}/> Task-Management
               </Link>
 
               <button
