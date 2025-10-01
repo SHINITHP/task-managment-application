@@ -33,7 +33,7 @@ export const LoginPage = () => {
     const isAuthenticated = !!localStorage.getItem("accessToken");
 
     if (isAuthenticated) {
-      navigate("/dashboard", { replace: true });
+      navigate("/admin", { replace: true });
     }
   }, []);
   const [showPassword, setShowPassword] = useState(false);
@@ -52,7 +52,7 @@ export const LoginPage = () => {
       setIsLoading(true);
       await signIn(values);
       toast.success("Signed in successfully!");
-      navigate("/dashboard");
+      navigate("/admin");
     } catch (error: any) {
       console.log(error.response?.data?.message || "Sign-In failed");
       toast.error(error.response?.data?.message || "Sign-In failed");
@@ -62,9 +62,9 @@ export const LoginPage = () => {
   };
 
   return (
-    <section className="flex w-full bg-zinc-50  dark:bg-transparent">
-      <div className="bg-muted m-auto h-fit w-full overflow-hidden rounded-[calc(var(--radius)+.125rem)]  shadow-md shadow-zinc-950/5 dark:[--color-muted:var(--color-zinc-900)]">
-        <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8 pb-6">
+    <section className="flex w-full bg-zinc-50  dark:bg-background">
+      <div className="bg-muted m-auto h-fit w-full overflow-hidden rounded-[calc(var(--radius)+.125rem)]  shadow-md shadow-zinc-950/5 dark:bg-background">
+        <div className="bg-card dark:bg-background -m-px rounded-[calc(var(--radius)+.125rem)] border p-8 pb-6">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(handleSubmit)}
@@ -151,7 +151,7 @@ export const LoginPage = () => {
           </div>
 
           <div className="grid grid-cols-1 ">
-            <Button type="button" variant="outline">
+            <Button type="button" className="dark:bg-white dark:text-black" variant="outline">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="0.98em"

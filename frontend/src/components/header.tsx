@@ -2,6 +2,7 @@ import { Hourglass, LogOut, Menu, Stethoscope, Timer, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ModeToggle } from "./mode-toogle";
 
 const menuItems = [
   { name: "Features", href: "#link" },
@@ -32,11 +33,13 @@ export const HeroHeader = () => {
 
   return (
     <header>
-      <nav className={`fixed z-20 border-b bg-white w-full px-2 `}>
+      <nav
+        className={`fixed z-20 border-b bg-white dark:bg-background w-full px-2 `}
+      >
         <div
           className={
             "mx-auto mt-2 max-w-8xl px-6 transition-all duration-300 lg:px-12"
-            }
+          }
         >
           <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
             {/* Logo and Mobile Button */}
@@ -46,7 +49,7 @@ export const HeroHeader = () => {
                 aria-label="home"
                 className="flex items-center space-x-2 gap-2 text-xl"
               >
-                <Timer size={30}/> Task-Management
+                <Timer size={30} /> Task-Management
               </Link>
 
               <button
@@ -85,11 +88,12 @@ export const HeroHeader = () => {
                   <LogOut /> Logout
                 </Button>
               ) : (
-                <>
+                <div className="flex gap-6">
+                  <ModeToggle />
                   <Button size="sm">
                     <Link to="/?authMode=sign-in">Sign In</Link>
                   </Button>
-                </>
+                </div>
               )}
             </div>
           </div>
@@ -115,11 +119,8 @@ export const HeroHeader = () => {
                     </Button>
                   ) : (
                     <>
-                      <Button asChild variant="outline" size="sm">
-                        <Link to="/?authMode=sign-in">Login</Link>
-                      </Button>
-                      <Button asChild size="sm">
-                        <Link to="/?authMode=sign-up">Sign Up</Link>
+                      <Button size="sm">
+                        <Link to="/?authMode=sign-in">Sign In</Link>
                       </Button>
                     </>
                   )}

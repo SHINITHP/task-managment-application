@@ -1,6 +1,7 @@
 export interface ISignInPayload {
   email: string;
   password: string;
+  role: "AGENT" | "ADMIN";
 }
 
 export interface IAuthResponse {
@@ -8,10 +9,22 @@ export interface IAuthResponse {
   user: {
     id: string;
     email: string;
+    role: "AGENT" | "ADMIN";
   };
 }
 
 export interface AuthModeProps {
   authMode: "sign-in" | "verify-otp" | "forgot-password" | "not-found";
   onClose: () => void;
+}
+
+export interface IAgent {
+  _id: string;
+  fullName: string;
+  email: string;
+  phone: number;
+  password?: string;
+  createdAt: Date;
+  role: "ADMIN" | "AGENT";
+  tasks: []
 }

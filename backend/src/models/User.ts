@@ -4,6 +4,11 @@ import { IUser } from "../types/index.js";
 
 const userSchema = new Schema<IUser>(
   {
+    fullName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     email: {
       type: String,
       required: true,
@@ -12,10 +17,15 @@ const userSchema = new Schema<IUser>(
       unique: true,
     },
     password: { type: String, required: true },
+    phone: { type: Number, required: true },
     role: {
       type: String,
       enum: ["ADMIN", "AGENT"],
       default: "AGENT",
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
     },
   },
   { timestamps: true }

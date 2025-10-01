@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js'
+import agentRoutes from './routes/agentRoute.js'
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/agents', agentRoutes);
 
 app.listen(PORT, async () => {
     connectDB();

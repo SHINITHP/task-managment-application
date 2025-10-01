@@ -50,12 +50,22 @@ export default {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			},
-			"navy-header": "hsl(var(--navy-header))",
-        	"light-gray": "hsl(var(--light-gray))",
-        	"health-good": "hsl(var(--health-good))",
-        	"health-fair": "hsl(var(--health-fair))",
-        	"health-poor": "hsl(var(--health-poor))",
-        	"blue-accent": "hsl(var(--blue-accent))",
+  			'navy-header': 'hsl(var(--navy-header))',
+  			'light-gray': 'hsl(var(--light-gray))',
+  			'health-good': 'hsl(var(--health-good))',
+  			'health-fair': 'hsl(var(--health-fair))',
+  			'health-poor': 'hsl(var(--health-poor))',
+  			'blue-accent': 'hsl(var(--blue-accent))',
+  			sidebar: {
+  				DEFAULT: 'hsl(var(--sidebar-background))',
+  				foreground: 'hsl(var(--sidebar-foreground))',
+  				primary: 'hsl(var(--sidebar-primary))',
+  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+  				accent: 'hsl(var(--sidebar-accent))',
+  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+  				border: 'hsl(var(--sidebar-border))',
+  				ring: 'hsl(var(--sidebar-ring))'
+  			}
   		}
   	}
   },
