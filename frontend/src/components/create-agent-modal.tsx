@@ -18,46 +18,74 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UserPlus } from "lucide-react";
+import type { CreateAgentModalProps } from "@/types";
 
+// Updated schema
 const schema = z.object({
+  fullName: z.string().min(3, "Full name must be at least 3 characters"),
   email: z.string().email("Invalid email"),
+  phone: z.string()
+    .regex(/^\+\d{1,4}\d{6,14}$/, "Enter valid mobile number with country code"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
   role: z.enum(["ADMIN", "AGENT"]),
 });
 
-interface InviteUserModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSave: (data: { email: string; role: "ADMIN" | "AGENT" }) => void;
-}
+type FormData = z.infer<typeof schema>;
 
-export const CreateAgentModal = ({ open, onOpenChange, onSave }: InviteUserModalProps) => {
-  const form = useForm({
+export const CreateAgentModal = ({ open, onOpenChange, onSave }: CreateAgentModalProps) => {
+  const form = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { email: "", role: "AGENT" as "ADMIN" | "AGENT" },
+    defaultValues: {
+      fullName: "",
+      email: "",
+      phone: "",
+      password: "",
+      role: "AGENT",
+    },
   });
 
-  const onSubmit = async (data: { email: string; role: "ADMIN" | "AGENT" }) => {
-    await onSave(data);
+  const onSubmit = async (data: z.infer<typeof schema>) => {
+    onSave(data);
     form.reset();
     onOpenChange(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md dark:bg-[#1a1a1a] animate-fade-in border border-border shadow-glow animate-scale-in">
+      <DialogContent className="max-w-lg dark:bg-[#1a1a1a] animate-fade-in border border-border shadow-glow animate-scale-in">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl font-semibold">
             <UserPlus className="h-5 w-5 text-primary" />
-            Invite User
+            Add Member
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
-            Invite a new user to join your team.
+            Add a new agent to join your team.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {/* Full Name */}
+            <FormField
+              control={form.control}
+              name="fullName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Full Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter full name"
+                      {...field}
+                      className="bg-slate-100 dark:bg-[#2a2a2a] border-border/50"
+                      aria-invalid={!!form.formState.errors.fullName}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Email */}
             <FormField
               control={form.control}
               name="email"
@@ -66,37 +94,60 @@ export const CreateAgentModal = ({ open, onOpenChange, onSave }: InviteUserModal
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter email..."
+                      placeholder="Enter email"
                       {...field}
                       className="bg-slate-100 dark:bg-[#2a2a2a] border-border/50"
-                      aria-invalid={form.formState.errors.email ? "true" : "false"}
+                      aria-invalid={!!form.formState.errors.email}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            {/* Phone */}
             <FormField
               control={form.control}
-              name="role"
+              name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Role</FormLabel>
+                  <FormLabel>Mobile Number</FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <SelectTrigger className="bg-slate-100 dark:bg-[#2a2a2a] border-border/50">
-                        <SelectValue placeholder="Select role" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="MEMBER">Member</SelectItem>
-                        <SelectItem value="ADMIN">Admin</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Input
+                      placeholder="Enter phone with country code (+1234567890)"
+                      {...field}
+                      className="bg-slate-100 dark:bg-[#2a2a2a] border-border/50"
+                      aria-invalid={!!form.formState.errors.phone}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            {/* Password */}
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="Enter password"
+                      {...field}
+                      className="bg-slate-100 dark:bg-[#2a2a2a] border-border/50"
+                      aria-invalid={!!form.formState.errors.password}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+
+            {/* Buttons */}
             <div className="flex justify-end gap-3 pt-4 border-t border-border/50">
               <Button
                 type="button"
@@ -107,8 +158,7 @@ export const CreateAgentModal = ({ open, onOpenChange, onSave }: InviteUserModal
                 Cancel
               </Button>
               <Button type="submit" disabled={form.formState.isSubmitting} variant="default">
-                <UserPlus className="h-4 w-4 mr-2" />
-                Send Invite
+                Create
               </Button>
             </div>
           </form>
@@ -116,4 +166,4 @@ export const CreateAgentModal = ({ open, onOpenChange, onSave }: InviteUserModal
       </DialogContent>
     </Dialog>
   );
-}
+};

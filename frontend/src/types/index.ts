@@ -28,3 +28,9 @@ export interface IAgent {
   role: "ADMIN" | "AGENT";
   tasks: []
 }
+
+export interface CreateAgentModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSave: (data: { fullName: string; email: string; phone: string; password: string; }) => void;
+}

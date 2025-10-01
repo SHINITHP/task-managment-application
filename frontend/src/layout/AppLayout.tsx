@@ -19,7 +19,7 @@ const AppLayout = () => {
       <AppSidebar />
       <main className="w-full">
         <AppHeader handleLogout={handleLogout} />
-        <div className="pt-20 px-8">
+        <div className="pt-20 px-4 md:px-8">
           <Outlet />
         </div>
       </main>

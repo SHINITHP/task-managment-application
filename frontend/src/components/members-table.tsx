@@ -13,6 +13,7 @@ import { Edit, Search, Trash2, UserPlus } from "lucide-react";
 import toast from "react-hot-toast";
 import { CreateAgentModal } from "./create-agent-modal";
 import type { IAgent } from "@/types";
+import { createAgent } from "@/api/agentApi";
 
 interface MembersPageProps {
   initialData: IAgent[];
@@ -35,46 +36,51 @@ export const MembersPage = ({ initialData }: MembersPageProps) => {
       user.role?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  console.log("initialData", users);
-  console.log("filteredUsers", filteredUsers);
-
-  const handleInvite = async (data: {
+  const handleCreate = async (values: {
+    fullName: string;
     email: string;
-    role: "ADMIN" | "AGENT";
+    phone: string;
+    password: string;
   }) => {
     setIsLoading(true);
     try {
+      const { data } = await createAgent(values);
+      setUsers((prev) => [...prev, data.user]);
+      console.log(data);
+      toast.success(data?.message || "Success!");
       setIsInviteModalOpen(false);
-    } catch (error) {
-      toast.error((error as Error).message || "Failed to send invitation");
+    } catch (error: any) {
+      console.error("error: ", error);
+      const message = error.response?.data?.message || "Something went wrong";
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleDelete = async (userId: string) => {
-    setIsLoading(true);
-    try {
-    } catch (error) {
-      toast.error((error as Error).message || "Failed to delete user");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // const handleDelete = async (userId: string) => {
+  //   setIsLoading(true);
+  //   try {
+  //   } catch (error) {
+  //     toast.error((error as Error).message || "Failed to delete user");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
     <div className="min-h-screen bg-gradient-subtle">
       <div className="container">
         <header className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">
+          <h1 className="text-2xl md:text-4xl font-bold text-foreground mb-2">
             Team Members
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-sm md:text-md text-muted-foreground">
             Manage and view all team members
           </p>
         </header>
 
-        <div className="bg-card rounded-lg shadow-lg border border-border">
+        <div className="bg-background rounded-lg shadow-lg border border-border">
           <div className="p-6 border-b border-border">
             <div className="flex flex-col sm:flex-row gap-4 justify-between">
               <div className="relative flex-1 max-w-md">
@@ -96,8 +102,8 @@ export const MembersPage = ({ initialData }: MembersPageProps) => {
             </div>
           </div>
 
-          <div className="overflow-x-auto">
-            <Table className="table-fixed w-full">
+          <div className="overflow-x-auto w-full">
+            <Table className="min-w-[1150px] table-fixed w-full">
               <TableHeader>
                 <TableRow className="border-border hover:bg-transparent">
                   <TableHead className="w-1/6 h-12 text-muted-foreground">
@@ -170,7 +176,6 @@ export const MembersPage = ({ initialData }: MembersPageProps) => {
                           )}
                         </div>
                       </TableCell>
-
                       <TableCell className="w-[100px] text-center">
                         <div className="flex items-center justify-center gap-3">
                           <Edit className="text-blue-600 w-5 h-5 cursor-pointer hover:text-blue-800" />
@@ -188,7 +193,7 @@ export const MembersPage = ({ initialData }: MembersPageProps) => {
       <CreateAgentModal
         open={isInviteModalOpen}
         onOpenChange={setIsInviteModalOpen}
-        onSave={handleInvite}
+        onSave={handleCreate}
       />
     </div>
   );
