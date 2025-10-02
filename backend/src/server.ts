@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import cors from 'cors'
 import 'dotenv/config';
 import * as fs from 'fs';
@@ -30,7 +30,7 @@ app.use(
 
 if (!fs.existsSync('uploads')) fs.mkdirSync('uploads');
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   console.info(`${req.method} ${req.url}`);
   next();
 });
