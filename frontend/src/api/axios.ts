@@ -21,10 +21,10 @@ api.interceptors.response.use(
     const originalRequest = error.config;
     if (
       error.response &&
-      error.response.status === 401 && error.response.message === 'Invalid or expired refresh token' &&
+      error.response.status === 401 && error.response.data.message === 'Invalid or expired refresh token' &&
       !originalRequest._retry
     ) {
-      originalRequest.retry = true;
+      originalRequest._retry = true;
       try {
         // call the refresh token :
         const res = await axios.post(
@@ -35,6 +35,7 @@ api.interceptors.response.use(
             headers: { "Content-Type": "application/json" },
           }
         );
+        console.log(res)
         localStorage.setItem("accessToken", res.data.accessToken);
         originalRequest.headers[
           "Authorization"

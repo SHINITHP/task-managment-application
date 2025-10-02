@@ -1,11 +1,11 @@
 export interface ISignInPayload {
   email: string;
   password: string;
-  role: "AGENT" | "ADMIN";
 }
 
 export interface IAuthResponse {
   accessToken: string;
+  message: string;
   user: {
     id: string;
     email: string;
@@ -54,4 +54,10 @@ export interface AddTaskModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSave: (file: File) => void;
+}
+
+export interface JwtPayload {
+  userId: string;
+  email: string;
+  role: 'ADMIN' | 'AGENT';
 }

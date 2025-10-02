@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { createAgent, getAllAgents } from "../controllers/agentController.js";
+import { authenticate } from "../middleware/authMiddleware.js";
 const router = Router();
 
-router.get('/', getAllAgents)
-router.post('/create', createAgent);
+router.get('/',authenticate, getAllAgents)
+router.post('/create',authenticate, createAgent);
 
 
 

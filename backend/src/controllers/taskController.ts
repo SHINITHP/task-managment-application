@@ -41,8 +41,20 @@ export const uploadAndDistribute = async (
 
 export const getAllTasks = async (req: Request, res: Response) => {
   try {
-    const agents = await Task.find({}).populate("agentId", "-password");
-    res.json(agents);
+    const tasks = await Task.find({}).populate("agentId", "-password");
+    res.json(tasks);
+  } catch (error) {
+    console.error("Fetch all agents error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getTasksById = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.agentId;
+    const tasks = await Task.find({ agentId: id }).lean();
+    console.log(tasks);
+    res.json(tasks);
   } catch (error) {
     console.error("Fetch all agents error:", error);
     res.status(500).json({ message: "Server error" });

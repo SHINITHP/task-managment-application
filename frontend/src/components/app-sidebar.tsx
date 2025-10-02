@@ -10,28 +10,28 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useContext } from "react";
+import AuthContext from "@/context/AuthContext";
 
-// Menu items.
-const items = [
-  {
-    title: "Home",
-    url: "/admin",
-    icon: Home,
-  },
-  {
-    title: "Tasks",
-    url: "/admin/task",
-    icon: Inbox,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
-];
+const menuConfig = {
+  ADMIN: [
+    { title: "Home", url: "/admin", icon: Home },
+    { title: "Tasks", url: "/admin/task", icon: Inbox },
+    { title: "Settings", url: "#", icon: Settings },
+  ],
+  AGENT: [{ title: "Tasks", url: "/agent/tasks", icon: Inbox }],
+};
 
 export const AppSidebar = () => {
+  const { user } = useContext(AuthContext);
+  if (!user) {
+    return <Navigate to="/" />;
+  }
+  console.log('sidebar', user)
+
+  const items = menuConfig[user.role];
+
   return (
     <Sidebar
       collapsible="icon"
@@ -42,9 +42,7 @@ export const AppSidebar = () => {
       <SidebarHeader className="py-5 h-20">
         <SidebarMenu className="h-full">
           <SidebarMenuItem>
-            <SidebarMenuButton
-              className="hover:!bg-transparent focus:!bg-transparent active:!bg-transparent"
-            >
+            <SidebarMenuButton className="hover:!bg-transparent focus:!bg-transparent active:!bg-transparent">
               <Timer className="w-10 h-10 shrink-0" />
               <span className="text-lg">Task-Management</span>
             </SidebarMenuButton>

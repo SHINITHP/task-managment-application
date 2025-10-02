@@ -4,12 +4,15 @@ import "./index.css";
 import App from "./App.tsx";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "./components/theme-provider.tsx";
+import { AuthProvider } from "./context/AuthContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <App />
-      <Toaster position="top-center" />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <App />
+        <Toaster position="top-center" />
+      </ThemeProvider>
+    </AuthProvider>
   </StrictMode>
 );

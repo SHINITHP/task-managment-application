@@ -13,3 +13,8 @@ export const getAllTasks = async () => {
   const res = await api.get('/tasks');
   return res;
 }
+
+export const getTasksById = async (agentId: string) => {
+  const res = await api.get(`/tasks/${agentId}`);
+  return res;
+}

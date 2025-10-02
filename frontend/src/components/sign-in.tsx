@@ -12,10 +12,11 @@ import {
 } from "./ui/form";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import z from "zod";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { signIn } from "@/api/authApi";
 import { toast } from "react-hot-toast";
+import AuthContext from "@/context/AuthContext";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -28,6 +29,7 @@ const formSchema = z.object({
 
 export const LoginPage = () => {
   const navigate = useNavigate();
+  const { setUser } = useContext(AuthContext);
 
   useEffect(() => {
     const isAuthenticated = !!localStorage.getItem("accessToken");
@@ -50,10 +52,12 @@ export const LoginPage = () => {
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
-      await signIn(values);
-      toast.success("Signed in successfully!");
-      navigate("/admin");
+      const res = await signIn(values);
+      setUser(res.accessToken);
+      toast.success(res.message ||"Signed in successfully!");
+      navigate(res.user.role === "ADMIN" ? "/admin" : "/agent");
     } catch (error: any) {
+      console.log(error);
       console.log(error.response?.data?.message || "Sign-In failed");
       toast.error(error.response?.data?.message || "Sign-In failed");
     } finally {
@@ -151,7 +155,11 @@ export const LoginPage = () => {
           </div>
 
           <div className="grid grid-cols-1 ">
-            <Button type="button" className="dark:bg-white dark:text-black" variant="outline">
+            <Button
+              type="button"
+              className="dark:bg-white dark:text-black"
+              variant="outline"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="0.98em"

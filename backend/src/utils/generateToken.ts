@@ -3,7 +3,7 @@ import { IDecodedToken, ITokenPayload } from "../types/index.js";
 
 // accessToken creation
 export const generateAccessToken = (user: ITokenPayload): string => {
-  return jwt.sign(user, process.env.JWT_SECRET!, { expiresIn: "15m" }); // 15 minutes
+  return jwt.sign(user, process.env.JWT_SECRET!, { expiresIn: "10s" }); // 15 minutes
 };
 
 // refreshToken creation
