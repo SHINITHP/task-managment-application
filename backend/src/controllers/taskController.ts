@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { parseFile } from "../utils/csvParser.js";
 import { distributeTask } from "../utils/taskDistributor.js";
 import Task from "../models/Task.js";
-import fs from "fs";
+import * as fs from 'fs';
 
 export const uploadAndDistribute = async (
   req: Request,

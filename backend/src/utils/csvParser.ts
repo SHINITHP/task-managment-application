@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import * as fs from 'fs';
+import * as path from 'path';
 import csv from "csv-parser";
 import XLSX from "xlsx";
 import { TaskData } from "../types/index.js";
