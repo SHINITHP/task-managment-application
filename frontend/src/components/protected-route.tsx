@@ -18,7 +18,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   if (!user) {
-    return <Navigate to="/" />;
+    return <Navigate to="/?authMode=sign-in" />;
   }
 
   if (user.role !== allowedRole) {

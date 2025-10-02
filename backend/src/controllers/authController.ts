@@ -124,3 +124,17 @@ export const refreshToken = async (
     res.status(403).json({ message: "Invalid or expired refresh token" });
   }
 };
+
+export const logout = (req: Request, res: Response) => {
+  try {
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", 
+      sameSite: "strict",
+    });
+    return res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.error("Logout error:", error);
+    return res.status(500).json({ message: "Logout failed" });
+  }
+};

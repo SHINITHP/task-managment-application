@@ -11,14 +11,14 @@ import { type JwtPayload } from "@/types";
 interface AuthContextType {
   user: JwtPayload | null;
   setUser: (token: string | null) => void;
-  logout: () => void;
+  clearlogData: () => void;
   loading: boolean;  // 👈 add loading state
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   setUser: () => {},
-  logout: () => {},
+  clearlogData: () => {},
   loading: true,
 });
 
@@ -51,13 +51,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const logout = () => {
+  const clearlogData = () => {
     localStorage.removeItem("accessToken");
     setUserState(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, logout, loading }}>
+    <AuthContext.Provider value={{ user, setUser, clearlogData, loading }}>
       {children}
     </AuthContext.Provider>
   );
