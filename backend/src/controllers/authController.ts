@@ -65,7 +65,7 @@ export const refreshToken = async (
 ): Promise<void> => {
   try {
     const token = req.cookies.refreshToken;
-    console.log("f4ef4ef ce");
+    console.log("refreshToken hitss");
     if (!token) {
       res.status(401).json({ message: "No refresh token provided" });
       return;

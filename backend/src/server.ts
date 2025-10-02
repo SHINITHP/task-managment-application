@@ -1,10 +1,12 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import fs from 'fs';
 import cookieParser from 'cookie-parser';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js'
 import agentRoutes from './routes/agentRoute.js'
+import taskRoutes from './routes/taskRoutes.js'
 
 dotenv.config();
 
@@ -26,6 +28,8 @@ app.use(
   })
 );
 
+if (!fs.existsSync('uploads')) fs.mkdirSync('uploads');
+
 app.use((req, res, next) => {
   console.info(`${req.method} ${req.url}`);
   next();
@@ -33,6 +37,7 @@ app.use((req, res, next) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/agents', agentRoutes);
+app.use('/api/tasks', taskRoutes);
 
 app.listen(PORT, async () => {
     connectDB();

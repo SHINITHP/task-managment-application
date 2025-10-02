@@ -1,6 +1,10 @@
+import { ClipboardList, Edit, Search, Trash2 } from "lucide-react";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import AddTaskModal from "./add-task-modal";
+import toast from "react-hot-toast";
+import { uploadCSV } from "@/api/TaskApi";
 import {
   Table,
   TableBody,
@@ -8,21 +12,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Edit, Search, Trash2, UserPlus } from "lucide-react";
-import toast from "react-hot-toast";
-import { CreateAgentModal } from "./create-agent-modal";
-import type { IAgent } from "@/types";
-import { createAgent } from "@/api/agentApi";
+} from "./ui/table";
+import type { ITask } from "@/types";
 import { Pagination } from "./pagination";
 
-interface MembersPageProps {
-  initialData: IAgent[];
+interface TaskTableProps {
+  initialData: ITask[];
 }
 
-export const MembersPage = ({ initialData }: MembersPageProps) => {
+const TaskTable = ({ initialData }: TaskTableProps) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [users, setUsers] = useState(initialData);
+  const [tasks, setTasks] = useState(initialData);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,31 +30,26 @@ export const MembersPage = ({ initialData }: MembersPageProps) => {
   const [pageSize] = useState(5);
 
   useEffect(() => {
-    setUsers(initialData);
+    setTasks(initialData);
   }, [initialData]);
 
-  const filteredUsers = users.filter(
-    (user) =>
-      user.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.fullName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.role?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredUsers = tasks.filter(
+    (task) =>
+      task.firstName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      task.notes?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const startIndex = (page - 1) * pageSize;
   const paginatedData = filteredUsers.slice(startIndex, startIndex + pageSize);
 
-  const handleCreate = async (values: {
-    fullName: string;
-    email: string;
-    phone: string;
-    password: string;
-  }) => {
+  const handleCreate = async (file: File) => {
     setIsLoading(true);
     try {
-      const { data } = await createAgent(values);
-      setUsers((prev) => [...prev, data.user]);
-      console.log(data);
-      toast.success(data?.message || "Success!");
+      const res = await uploadCSV(file);
+      setTasks((prev) => [...prev, res.tasks]);
+      console.log(res);
+      console.log('res.tasks', res.tasks);
+      toast.success(res.message || "Success!");
       setIsInviteModalOpen(false);
     } catch (error: any) {
       console.error("error: ", error);
@@ -65,25 +60,15 @@ export const MembersPage = ({ initialData }: MembersPageProps) => {
     }
   };
 
-  // const handleDelete = async (userId: string) => {
-  //   setIsLoading(true);
-  //   try {
-  //   } catch (error) {
-  //     toast.error((error as Error).message || "Failed to delete user");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
   return (
-    <div className="min-h-screen bg-gradient-subtle pb-20">
+    <div className="min-h-screen bg-gradient-subtle">
       <div className="container">
         <header className="mb-8">
           <h1 className="text-2xl md:text-4xl font-bold text-foreground mb-2">
-            Team Members
+            Task Management
           </h1>
           <p className="text-sm md:text-md text-muted-foreground">
-            Manage and view all team members
+            View all assigned tasks and upload new ones for your team
           </p>
         </header>
 
@@ -104,30 +89,26 @@ export const MembersPage = ({ initialData }: MembersPageProps) => {
                 className="bg-primary hover:bg-primary/90 text-primary-foreground"
                 disabled={isLoading}
               >
-                <UserPlus className="mr-2 h-4 w-4" /> Add Members
+                <ClipboardList className="mr-1 h-4 w-4" /> Add Task
               </Button>
             </div>
           </div>
-
           <div className="overflow-x-auto w-full">
             <Table className="min-w-[1150px] table-fixed w-full">
               <TableHeader>
                 <TableRow className="border-border hover:bg-transparent">
-                  <TableHead className="w-1/6 h-12 text-muted-foreground">
-                    Name
+                  <TableHead className="w-1/3 h-12 text-muted-foreground">
+                    FirstName
                   </TableHead>
-                  <TableHead className="w-1/6 text-muted-foreground">
-                    Email
-                  </TableHead>
-                  <TableHead className="w-1/6 text-muted-foreground">
+                  <TableHead className="w-1/3 text-muted-foreground">
                     Phone
                   </TableHead>
-                  <TableHead className="w-1/6 text-muted-foreground">
-                    Role
+                  <TableHead className="w-1/3 text-muted-foreground">
+                    Notes
                   </TableHead>
-                  <TableHead className="w-1/4 text-muted-foreground">
-                    Tasks
-                  </TableHead>
+                  {/* <TableHead className="w-1/4 text-muted-foreground">
+                    createdAt
+                  </TableHead> */}
                   <TableHead className="w-[100px] text-muted-foreground text-center">
                     Actions
                   </TableHead>
@@ -141,48 +122,25 @@ export const MembersPage = ({ initialData }: MembersPageProps) => {
                       colSpan={6}
                       className="text-center text-muted-foreground"
                     >
-                      No members found.
+                      No tasks found.
                     </TableCell>
                   </TableRow>
                 ) : (
-                  paginatedData.map((user) => (
+                  paginatedData.map((task) => (
                     <TableRow
-                      key={user._id}
+                      key={task._id}
                       className="border-border h-20 hover:bg-muted/30"
                     >
                       <TableCell className="w-1/6 text-muted-foreground">
-                        {user.fullName || "-"}
+                        {task.firstName || "-"}
                       </TableCell>
                       <TableCell className="w-1/6 text-muted-foreground">
-                        {user.email || "-"}
+                        {task.phone || "-"}
                       </TableCell>
                       <TableCell className="w-1/6 text-muted-foreground">
-                        {user.phone || "-"}
+                        {task.notes || "-"}
                       </TableCell>
-                      <TableCell className="w-1/6 text-foreground">
-                        {user.role || "-"}
-                      </TableCell>
-                      <TableCell className="w-1/4 text-muted-foreground">
-                        <div className="max-h-16 overflow-y-auto pr-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-                          {user.taskIds && user.taskIds.length > 0 ? (
-                            <ul className="list-disc list-inside space-y-1">
-                              {user.taskIds.map((task, index) => (
-                                <li
-                                  key={task._id || index}
-                                  className="text-sm whitespace-nowrap overflow-hidden text-ellipsis"
-                                  title={task.notes}
-                                >
-                                  {task.notes}
-                                </li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <p className="text-sm text-muted-foreground italic">
-                              No tasks
-                            </p>
-                          )}
-                        </div>
-                      </TableCell>
+
                       <TableCell className="w-[100px] text-center">
                         <div className="flex items-center justify-center gap-3">
                           <Edit className="text-blue-600 w-5 h-5 cursor-pointer hover:text-blue-800" />
@@ -202,7 +160,8 @@ export const MembersPage = ({ initialData }: MembersPageProps) => {
           onPageChange={(p) => setPage(p)}
         />
       </div>
-      <CreateAgentModal
+
+      <AddTaskModal
         open={isInviteModalOpen}
         onOpenChange={setIsInviteModalOpen}
         onSave={handleCreate}
@@ -210,3 +169,5 @@ export const MembersPage = ({ initialData }: MembersPageProps) => {
     </div>
   );
 };
+
+export default TaskTable;

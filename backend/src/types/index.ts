@@ -8,6 +8,7 @@ export interface IUser {
   password: string;
   createdAt: Date;
   role: "ADMIN" | "AGENT";
+  taskIds: [];
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -21,4 +22,22 @@ export interface ITokenPayload {
 export interface IDecodedToken extends ITokenPayload {
   iat: number; // issued at (timestamp in seconds)
   exp: number; // expiration timestamp in seconds
+}
+
+export interface ITask extends Document {
+  firstName: string;
+  phone: number;
+  notes: string;
+  agentId: Types.ObjectId;
+}
+
+export interface TaskData {
+  firstName: string;
+  phone: number;
+  notes: string;
+}
+
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  AGENT = 'AGENT',
 }

@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings, Timer } from "lucide-react";
+import { Home, Inbox, Settings, Timer } from "lucide-react";
 
 import {
   Sidebar,
@@ -10,17 +10,18 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Link } from "react-router-dom";
 
 // Menu items.
 const items = [
   {
     title: "Home",
-    url: "#",
+    url: "/admin",
     icon: Home,
   },
   {
     title: "Tasks",
-    url: "#",
+    url: "/admin/task",
     icon: Inbox,
   },
   {
@@ -61,10 +62,10 @@ export const AppSidebar = () => {
                     className="py-5"
                     asChild
                   >
-                    <a href={item.url}>
+                    <Link to={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

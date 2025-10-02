@@ -23,6 +23,12 @@ const userSchema = new Schema<IUser>(
       enum: ["ADMIN", "AGENT"],
       default: "AGENT",
     },
+    taskIds: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Task",
+      },
+    ],
     createdAt: {
       type: Date,
       default: Date.now,

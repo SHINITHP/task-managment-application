@@ -50,7 +50,7 @@ export const createAgent = async (req: Request, res: Response) => {
 
 export const getAllAgents = async (req: Request, res: Response) => {
   try {
-    const agents = await User.find({}).select("-password"); // Exclude password
+    const agents = await User.find({}).select("-password").populate("taskIds");
     res.json(agents);
   } catch (error) {
     console.error("Fetch all agents error:", error);

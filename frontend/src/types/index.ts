@@ -18,19 +18,40 @@ export interface AuthModeProps {
   onClose: () => void;
 }
 
-export interface IAgent {
+export interface ITask {
   _id: string;
-  fullName: string;
-  email: string;
-  phone: number;
-  password?: string;
-  createdAt: Date;
-  role: "ADMIN" | "AGENT";
-  tasks: []
+  firstName: string;
+  phone: string;
+  notes: string;
+  agentId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+
+export interface IAgent {
+    _id: string;
+    fullName: string;
+    email: string;
+    phone: number;
+    password?: string;
+    createdAt: Date;
+    role: "ADMIN" | "AGENT";
+    taskIds: ITask[];
 }
 
 export interface CreateAgentModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSave: (data: { fullName: string; email: string; phone: string; password: string; }) => void;
+  onSave: (data: {
+    fullName: string;
+    email: string;
+    phone: string;
+    password: string;
+  }) => void;
+}
+export interface AddTaskModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSave: (file: File) => void;
 }
