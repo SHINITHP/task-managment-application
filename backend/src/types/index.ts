@@ -1,3 +1,4 @@
+import { Request } from "express";
 import { Types } from "mongoose";
 
 export interface IUser {
@@ -40,4 +41,21 @@ export interface TaskData {
 export enum UserRole {
   ADMIN = 'ADMIN',
   AGENT = 'AGENT',
+}
+
+export interface JwtPayload {
+  id: string;
+  email: string;
+  role: UserRole;
+}
+
+
+export interface AuthenticatedRequest extends Request {
+  user?: JwtPayload;
+}
+
+export interface CsvRow {
+  firstName: string; 
+  phone: string; 
+  notes: string; 
 }

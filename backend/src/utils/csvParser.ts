@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import csv from "csv-parser";
 import XLSX from "xlsx";
-import { TaskData } from "../types/index.js";
+import { CsvRow, TaskData } from "../types/index.js";
 
 
 export const parseFile = async (filePath: string): Promise<TaskData[]> => {
@@ -13,12 +13,12 @@ export const parseFile = async (filePath: string): Promise<TaskData[]> => {
     return new Promise((resolve, reject) => {
       fs.createReadStream(filePath)
         .pipe(csv())
-        .on("data", (row) => {
+        .on("data", (row: CsvRow) => {
           const firstName =
-            row.FirstName || row["First Name"] || row.firstname?.trim();
-          const phoneStr = row.Phone || row.phone?.trim();
+            row.firstName || row.firstName?.trim();
+          const phoneStr = row.phone || row.phone?.trim();
           const phone = parseInt(phoneStr, 10);
-          const notes = row.Notes || row.notes?.trim();
+          const notes = row.notes || row.notes?.trim();
 
           if (firstName && !isNaN(phone) && notes) {
             results.push({ firstName, phone, notes });

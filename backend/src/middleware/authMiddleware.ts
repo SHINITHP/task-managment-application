@@ -1,16 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { UserRole } from "../types/index.js";
+import { AuthenticatedRequest, JwtPayload, UserRole } from "../types/index.js";
 
-interface JwtPayload {
-  id: string;
-  email: string;
-  role: UserRole;
-}
 
-export interface AuthenticatedRequest extends Request {
-  user?: JwtPayload;
-}
 
 export const authenticate = (
   req: AuthenticatedRequest,
